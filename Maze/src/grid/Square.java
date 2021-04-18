@@ -1,43 +1,25 @@
 package grid;
 
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Random;
 
 public class Square {
+
+
     private Point location;
     private Color color;
     public SquareType type;
 
     public Square(SquareType type, Point location) {
-        this.type = type;
+        setType(type);
         this.location = location;
-        this.color = colorFromType(type);
     }
 
-    public void setNextType() {
-        switch (this.type) {
-            case FREE:
-                this.type = SquareType.WALL;
-                break;
-            case WALL:
-                this.type = SquareType.AGENT;
-                break;
-            case AGENT:
-                this.type = SquareType.GOAL;
-                break;
-            case GOAL:
-                this.type = SquareType.TOVISIT;
-                break;
-            case TOVISIT:
-                this.type = SquareType.VISITED;
-                break;
-            case VISITED:
-                this.type = SquareType.FREE;
-                break;
-            default:
-                this.type = SquareType.FREE;
-                break;
-        }
-        this.color = colorFromType(this.type);
+    public void setType(SquareType newType) {
+        this.type = newType;
+        this.color = colorFromType(newType);
     }
 
     private Color colorFromType(SquareType type) {
@@ -50,11 +32,14 @@ public class Square {
                 return Color.red;
             case GOAL:
                 return Color.orange;
-            case TOVISIT:
+            case TO_VISIT:
                 return Color.cyan;
             case VISITED:
                 return Color.green;
+            case GOAL_FOUND:
+                return Color.blue;
             default:
+                System.out.println("Color undefined for type " + type + ". Setting to default color.");
                 return Color.white;
         }
     }
@@ -66,8 +51,41 @@ public class Square {
         return location.y;
     }
 
+    public Point getLocation() {
+        return location;
+    }
+
     public Color getColor() {
         return color;
     }
 
+    public boolean isWall() {
+        return this.type == SquareType.WALL;
+    }
+
+
+
+    public void setRandomType() {
+        SquareType[] types = SquareType.values();
+        int size = types.length;
+
+        int randomIndex = new Random().nextInt(size);
+
+        SquareType randomType = types[randomIndex];
+
+        setType(randomType);
+    }
+
+    public void setNextType() {
+        ArrayList<SquareType> types = new ArrayList<>();
+        types.addAll(Arrays.asList(SquareType.values()));
+        int size = types.size();
+
+        int currentTypeIndex = types.indexOf(this.type);
+        int nextTypeIndex = (currentTypeIndex + 1) % size;
+
+        SquareType randomType = types.get(nextTypeIndex);
+
+        setType(randomType);
+    }
 }

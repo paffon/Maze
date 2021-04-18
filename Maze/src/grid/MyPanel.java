@@ -61,7 +61,7 @@ public class MyPanel extends JPanel implements ActionListener {
 
         Square randomSquare = grid.getSquare(randomRow, randomCol);
 
-        randomSquare.setNextType();
+        randomSquare.setRandomType();
 
         repaint(); // this calls paint() for us every time.
     }
