@@ -37,7 +37,7 @@ public class MyPanel extends JPanel implements ActionListener {
         this.PANEL_WIDTH = cols * tileSize;
         this.PANEL_HEIGHT = rows * tileSize;
 
-        this.grid = initializeGrid(rows, cols, tileSize);
+        grid = initializeGrid(rows, cols, tileSize);
 
         this.setPreferredSize(new Dimension(PANEL_WIDTH, PANEL_HEIGHT));
         this.setBackground(Color.BLACK);
