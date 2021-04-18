@@ -12,6 +12,7 @@ public class MyPanel extends JPanel implements ActionListener {
     int PANEL_HEIGHT;
     Timer timer;
     Grid grid;
+    int counter;
 
     public MyPanel(int rows, int cols, int squareSize) {
         this.PANEL_WIDTH = cols * squareSize;
@@ -21,6 +22,8 @@ public class MyPanel extends JPanel implements ActionListener {
 
         this.setPreferredSize(new Dimension(PANEL_WIDTH, PANEL_HEIGHT));
         this.setBackground(Color.BLACK);
+
+        counter = 0;
 
         timer = new Timer(100, this);
         timer.start();
@@ -52,7 +55,30 @@ public class MyPanel extends JPanel implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         // the actions to be performed between frames
+        int rows = grid.getRows();
+        int cols = grid.getCols();
+        boolean flag = true;
+        int changed = 0;
+        for(int r=0; r<rows && flag; r++) {
+            for(int c=0; c<cols && flag; c++) {
+                if(changed < counter) {
+                    Square currentSquare = grid.getSquare(r, c);
+                    currentSquare.setNextType();
+                    changed++;
+                }
+                else {
+                    flag = false;
+                }
+            }
+        }
 
+        counter++;
+
+
+        repaint(); // this calls paint() for us every time.
+    }
+
+    private void changeRandomSquareRandomly() {
         int rows = grid.getRows();
         int cols = grid.getCols();
 
@@ -61,84 +87,6 @@ public class MyPanel extends JPanel implements ActionListener {
 
         Square randomSquare = grid.getSquare(randomRow, randomCol);
 
-        randomSquare.setRandomType();
-
-        repaint(); // this calls paint() for us every time.
+        randomSquare.setNextType();
     }
-
-//    int PANEL_WIDTH;
-//    int PANEL_HEIGHT;
-//    Timer timer;
-//    int rows;
-//    int cols;
-//    int tileSize;
-//    int r = 0;
-//    int c = 0;
-//    Point[][] grid;
-//
-//    public MyPanel(int rows, int cols, int tileSize) {
-//        this.PANEL_WIDTH = cols * tileSize;
-//        this.PANEL_HEIGHT = rows * tileSize;
-//
-//        this.rows = rows;
-//        this.cols = cols;
-//        this.tileSize = tileSize;
-//
-//        grid = initializeGrid(rows, cols, tileSize);
-//
-//        this.setPreferredSize(new Dimension(PANEL_WIDTH, PANEL_HEIGHT));
-//        this.setBackground(Color.BLACK);
-//
-//        timer = new Timer(50, this);
-//        timer.start();
-//    }
-//
-//    private Point[][] initializeGrid(int rows, int cols, int tileSize) {
-//        Point[][] grid = new Point[rows][cols];
-//
-//        for(int r = 0; r < rows; r++) {
-//            for(int c = 0; c < cols; c++) {
-//                grid[r][c] = new Point(c * tileSize, r * tileSize);
-//            }
-//        }
-//
-//        return grid;
-//    }
-//
-//    public void paint(Graphics g) {
-//        super.paint(g); // paint background
-//
-//        Graphics2D g2D = (Graphics2D) g;
-//
-//        for(int row = 0; row < rows; row++) {
-//            for(int col = 0; col < cols; col++) {
-//                Point point = grid[row][col];
-//
-//                if(row == r && col == c) {
-//                    g2D.setColor(Color.RED);
-//                    g2D.fillRect(point.x, point.y, tileSize - 2, tileSize - 2);
-//                }
-//            }
-//        }
-//    }
-//
-//    @Override
-//    public void actionPerformed(ActionEvent e) {
-//        grid[r][c].marked = true;
-//
-//        if(r == rows - 1 && c == cols - 1) {
-//            grid = initializeGrid(rows, cols, tileSize);
-//            r = 0;
-//            c = 0;
-//        }
-//        else if(c == cols - 1) {
-//            c = 0;
-//            r++;
-//        }
-//        else {
-//            c++;
-//        }
-//
-//        repaint();
-//    }
 }
