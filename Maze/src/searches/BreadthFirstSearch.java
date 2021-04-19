@@ -68,15 +68,18 @@ public class BreadthFirstSearch {
                 currentSquare.setType(SquareType.GOAL_FOUND);
                 System.out.println("Found a path");
                 pathFound = true;
+                return;
             }
 
-            currentSquare.setType(SquareType.VISITED);
+            if(! currentSquare.isAgent()) {
+                currentSquare.setType(SquareType.VISITED);
+            }
+
             visited.add(currentSquare);
 
             Set<Square> neighbours = grid.getNeighbours(currentSquare);
             for(Square neighbour : neighbours) {
                 if(! (neighbour.isWall() || visited.contains(neighbour) || q.contains(neighbour) ) ) {
-                    System.out.println("adding neighbour " + neighbour.getGridCoordinates() + " ("+neighbour.type+") by " + currentSquare.getGridCoordinates() + "("+currentSquare.type+")");
                     neighbour.setType(SquareType.TO_VISIT);
                     q.add(neighbour);
                 }

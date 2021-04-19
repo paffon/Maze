@@ -25,18 +25,18 @@ public class MyPanel extends JPanel implements ActionListener {
         Square origin = grid.getSquare(0, 0);
         Square goal = grid.getSquare(rows-1, cols-1);
         //Adding a wall in the middle of the grid
-        int mid = cols/2;
         for(int i=0; i<rows; i++) {
-            Square s = grid.getSquare(i, mid);
-            System.out.println("Setting a wall at " + s.getGridCoordinates());
+            Square s = grid.getSquare(i, cols/2);
             s.setType(SquareType.WALL);
         }
+        grid.getSquare(rows/2, cols/2).setType(SquareType.FREE);
         bfs = new BreadthFirstSearch(grid, origin, goal);
 
         this.setPreferredSize(new Dimension(PANEL_WIDTH, PANEL_HEIGHT));
         this.setBackground(Color.BLACK);
 
-        timer = new Timer(100, this);
+        int fps = 300;
+        timer = new Timer(1000/fps, this);
         timer.start();
     }
 

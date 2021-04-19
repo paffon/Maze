@@ -79,6 +79,10 @@ public class Square {
         return this.type == SquareType.WALL;
     }
 
+    public boolean isAgent() {
+        return this.type == SquareType.AGENT;
+    }
+
     public void setRandomType() {
         SquareType[] types = SquareType.values();
         int size = types.length;
