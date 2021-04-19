@@ -1,5 +1,7 @@
 package grid;
 
+import searches.BreadthFirstSearch;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -12,18 +14,27 @@ public class MyPanel extends JPanel implements ActionListener {
     int PANEL_HEIGHT;
     Timer timer;
     Grid grid;
-    int counter;
+    boolean pathFound;
+    BreadthFirstSearch bfs;
 
     public MyPanel(int rows, int cols, int squareSize) {
         this.PANEL_WIDTH = cols * squareSize;
         this.PANEL_HEIGHT = rows * squareSize;
 
         grid = new Grid(rows, cols, squareSize);
+        Square origin = grid.getSquare(0, 0);
+        Square goal = grid.getSquare(rows-1, cols-1);
+        //Adding a wall in the middle of the grid
+        int mid = cols/2;
+        for(int i=0; i<rows; i++) {
+            Square s = grid.getSquare(i, mid);
+            System.out.println("Setting a wall at " + s.getGridCoordinates());
+            s.setType(SquareType.WALL);
+        }
+        bfs = new BreadthFirstSearch(grid, origin, goal);
 
         this.setPreferredSize(new Dimension(PANEL_WIDTH, PANEL_HEIGHT));
         this.setBackground(Color.BLACK);
-
-        counter = 0;
 
         timer = new Timer(100, this);
         timer.start();
@@ -39,8 +50,8 @@ public class MyPanel extends JPanel implements ActionListener {
         for(int r = 0; r < rows; r++) {
             for(int c = 0; c < cols; c++) {
                 Square currentSquare = grid.getSquare(r, c);
-                int x = currentSquare.getX();
-                int y = currentSquare.getY();
+                int x = currentSquare.getScreenX();
+                int y = currentSquare.getScreenY();
                 int squareSize = grid.getSquareSize();
 
                 g2D.setColor(currentSquare.getColor());
@@ -55,27 +66,13 @@ public class MyPanel extends JPanel implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         // the actions to be performed between frames
-        int rows = grid.getRows();
-        int cols = grid.getCols();
-        boolean flag = true;
-        int changed = 0;
-        for(int r=0; r<rows && flag; r++) {
-            for(int c=0; c<cols && flag; c++) {
-                if(changed < counter) {
-                    Square currentSquare = grid.getSquare(r, c);
-                    currentSquare.setNextType();
-                    changed++;
-                }
-                else {
-                    flag = false;
-                }
-            }
+
+        if(bfs.foundSolution() || bfs.solutionDoesNotExist())
+            timer.stop();
+        else {
+            bfs.next();
+            repaint(); // this calls paint() for us every time.
         }
-
-        counter++;
-
-
-        repaint(); // this calls paint() for us every time.
     }
 
     private void changeRandomSquareRandomly() {

@@ -3,18 +3,19 @@ package grid;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Objects;
 import java.util.Random;
 
 public class Square {
 
-
-    private Point location;
+    private Point screenCoordinates;
+    private Point gridCoordinates;
     private Color color;
     public SquareType type;
 
-    public Square(SquareType type, Point location) {
+    public Square(SquareType type, Point screenCoordinates) {
         setType(type);
-        this.location = location;
+        this.screenCoordinates = screenCoordinates;
     }
 
     public void setType(SquareType newType) {
@@ -44,15 +45,30 @@ public class Square {
         }
     }
 
-    public int getX() {
-        return location.x;
+    public int getScreenX() {
+        return screenCoordinates.x;
     }
-    public int getY() {
-        return location.y;
+    public int getScreenY() {
+        return screenCoordinates.y;
     }
 
-    public Point getLocation() {
-        return location;
+    public int getGridX() {
+        return gridCoordinates.x;
+    }
+    public int getGridY() {
+        return gridCoordinates.y;
+    }
+
+    public Point getGridCoordinates() {
+        return gridCoordinates;
+    }
+
+    public void setGridCoordinates(Point gridCoordinates) {
+        this.gridCoordinates = gridCoordinates;
+    }
+
+    public Point getScreenCoordinates() {
+        return screenCoordinates;
     }
 
     public Color getColor() {
@@ -62,8 +78,6 @@ public class Square {
     public boolean isWall() {
         return this.type == SquareType.WALL;
     }
-
-
 
     public void setRandomType() {
         SquareType[] types = SquareType.values();
@@ -87,5 +101,18 @@ public class Square {
         SquareType randomType = types.get(nextTypeIndex);
 
         setType(randomType);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Square)) return false;
+        Square square = (Square) o;
+        return Objects.equals(getGridCoordinates(), square.getGridCoordinates());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getGridCoordinates());
     }
 }
