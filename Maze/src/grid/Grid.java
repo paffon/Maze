@@ -1,6 +1,8 @@
 package grid;
 
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 public class Grid {
@@ -8,14 +10,37 @@ public class Grid {
 
     private int rows, cols;
 
-    private int squareSize;
+    private int squareSize = 20; // Default square size
 
     public Grid(int rows, int cols, int squareSize) {
         this.rows = rows;
         this.cols = cols;
         this.squareSize = squareSize;
 
-        initSquares();
+        initEmptyGrid();
+    }
+
+    public Grid(char[][] chars) {
+        Map<Character, SquareType> types = new HashMap<>();
+        types.put('#', SquareType.WALL);
+        types.put(' ', SquareType.FREE);
+        types.put('A', SquareType.AGENT);
+        types.put('G', SquareType.GOAL);
+
+        this.rows = chars.length;
+        this.cols = chars[0].length;
+
+        squares = new Square[rows][cols];
+        for(int r=0; r<rows; r++) {
+            for(int c=0; c<cols; c++) {
+                Point newScreenLocation = new Point(c*squareSize, r*squareSize);
+                Point newGridLocation = new Point(r, c);
+                SquareType newType = types.get(chars[r][c]);
+                Square newSquare = new Square(newType, newScreenLocation);
+                newSquare.setGridCoordinates(newGridLocation);
+                squares[r][c] = newSquare;
+            }
+        }
     }
 
     public int getRows() {
@@ -36,12 +61,15 @@ public class Grid {
         else
             return null;
     }
+    public Square getSquare(Point point) {
+        return getSquare(point.x, point.y);
+    }
 
     private boolean withinBounds(int n, int min, int max) {
         return (n >= min && n <= max);
     }
 
-    private void initSquares() {
+    private void initEmptyGrid() {
         squares = new Square[rows][cols];
         for(int r=0; r<rows; r++) {
             for(int c=0; c<cols; c++) {
@@ -66,7 +94,6 @@ public class Grid {
         if(east != null) result.add(east);
         if(west != null) result.add(west);
 
-//        System.out.println("Returning " + result.size() + " neighbours");
         return result;
     }
 

@@ -6,6 +6,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.FileNotFoundException;
 import java.util.Random;
 
 public class MyPanel extends JPanel implements ActionListener {
@@ -14,28 +15,25 @@ public class MyPanel extends JPanel implements ActionListener {
     int PANEL_HEIGHT;
     Timer timer;
     Grid grid;
-    boolean pathFound;
     BreadthFirstSearch bfs;
 
-    public MyPanel(int rows, int cols, int squareSize) {
+    public MyPanel(int rows, int cols, int squareSize) throws FileNotFoundException {
         this.PANEL_WIDTH = cols * squareSize;
         this.PANEL_HEIGHT = rows * squareSize;
-
-        grid = new Grid(rows, cols, squareSize);
-        Square origin = grid.getSquare(0, 0);
-        Square goal = grid.getSquare(rows-1, cols-1);
-        //Adding a wall in the middle of the grid
-        for(int i=0; i<rows; i++) {
-            Square s = grid.getSquare(i, cols/2);
-            s.setType(SquareType.WALL);
-        }
-        grid.getSquare(rows/2, cols/2).setType(SquareType.FREE);
-        bfs = new BreadthFirstSearch(grid, origin, goal);
 
         this.setPreferredSize(new Dimension(PANEL_WIDTH, PANEL_HEIGHT));
         this.setBackground(Color.BLACK);
 
-        int fps = 300;
+        MazeConstructor mz = new MazeConstructor();
+        char[][] chars = mz.construct("maze1.txt");
+        grid = new Grid(chars);
+        Square origin = grid.getSquare(mz.agents.get(0));
+        Square goal = grid.getSquare(mz.goals.get(0));
+        bfs = new BreadthFirstSearch(grid, origin, goal);
+
+
+
+        int fps = 50;
         timer = new Timer(1000/fps, this);
         timer.start();
     }

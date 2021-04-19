@@ -2,6 +2,11 @@ package grid;
 
 public class Main {
     public static void main(String[] args) {
-        new MyFrame(10, 20, 20);
+        try {
+            new MyFrame(20, 20, 20);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 }
