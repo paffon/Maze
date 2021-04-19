@@ -16,14 +16,9 @@ public class MyPanel extends JPanel implements ActionListener {
     Timer timer;
     Grid grid;
     BreadthFirstSearch bfs;
+    private final int squareSize = 20;
 
-    public MyPanel(int rows, int cols, int squareSize) throws FileNotFoundException {
-        this.PANEL_WIDTH = cols * squareSize;
-        this.PANEL_HEIGHT = rows * squareSize;
-
-        this.setPreferredSize(new Dimension(PANEL_WIDTH, PANEL_HEIGHT));
-        this.setBackground(Color.BLACK);
-
+    public MyPanel() throws FileNotFoundException {
         MazeConstructor mz = new MazeConstructor();
         char[][] chars = mz.construct("maze1.txt");
         grid = new Grid(chars);
@@ -31,9 +26,16 @@ public class MyPanel extends JPanel implements ActionListener {
         Square goal = grid.getSquare(mz.goals.get(0));
         bfs = new BreadthFirstSearch(grid, origin, goal);
 
+        int rows = grid.getRows();
+        int cols = grid.getCols();
 
+        this.PANEL_WIDTH = cols * squareSize;
+        this.PANEL_HEIGHT = rows * squareSize;
 
-        int fps = 50;
+        this.setPreferredSize(new Dimension(PANEL_WIDTH, PANEL_HEIGHT));
+        this.setBackground(Color.BLACK);
+
+        int fps = 1000;
         timer = new Timer(1000/fps, this);
         timer.start();
     }
