@@ -31,9 +31,9 @@ public class MyPanel extends JPanel implements ActionListener {
             try {
                 mazeAsGridOfChars = mazeConstructor.constructMazeFromTextFile(mazeName + ".txt");
             } catch (FileNotFoundException e) {
-
-                System.out.println("Maze name <<<" + mazeName + ">>> Not found.\nSolving default maze: <<<maze1.txt>>>");
-                mazeAsGridOfChars = mazeConstructor.constructMazeFromTextFile("maze1.txt");
+                System.out.println("Maze name <<<" + mazeName + ">>> Not found.");
+                mazeName = "maze4";
+                mazeAsGridOfChars = mazeConstructor.constructMazeFromTextFile(mazeName+".txt");
             }
         }
         grid = new Grid(mazeAsGridOfChars);
@@ -49,10 +49,11 @@ public class MyPanel extends JPanel implements ActionListener {
                 break;
             default:
                 search = new AStarSearch(grid, origin, goal);
+                searchKind = "AStar";
                 break;
         }
 
-        System.out.println("Performing " + searchKind + " search");
+        System.out.println("Solving maze '"+mazeName+"' with '" + searchKind + "' search...");
 
         int rows = grid.getRows();
         int cols = grid.getCols();
@@ -63,7 +64,7 @@ public class MyPanel extends JPanel implements ActionListener {
         this.setPreferredSize(new Dimension(PANEL_WIDTH, PANEL_HEIGHT));
         this.setBackground(Color.BLACK);
 
-        int fps = 20;
+        int fps = 50;
         timer = new Timer(1000/fps, this);
         timer.start();
     }

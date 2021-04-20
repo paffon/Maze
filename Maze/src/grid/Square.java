@@ -27,19 +27,19 @@ public class Square {
     private Color colorFromType(SquareType type) {
         switch (type) {
             case FREE:
-                return Color.black;
+                return new Color(220,220,220);
             case WALL:
-                return Color.gray;
+                return new Color(20,50,50);
             case AGENT:
-                return Color.red;
+                return new Color(200,50,50);
             case GOAL:
-                return Color.orange;
-            case TO_VISIT:
-                return Color.cyan;
-            case VISITED:
-                return Color.green;
+                return new Color(0,100,200);
             case GOAL_FOUND:
-                return Color.blue;
+                return new Color(50,150,250);
+            case TO_VISIT:
+                return new Color(60,210,150);
+            case VISITED:
+                return new Color(50,200,100);
             default:
                 System.out.println("Color undefined for type " + type + ". Setting to default color.");
                 return Color.white;

@@ -21,13 +21,19 @@ public class AStarSearch extends Search {
     }
 
     public double heuristic(Square square) {
-        return manhattanDistance(square, goal);
+        return Math.pow(euclideanDistance(square, goal), 2); // Squaring the heuristic to give it more weight
     }
 
     private double manhattanDistance(Square s1, Square s2) {
         double deltaX = Math.abs(s1.getGridX() - s2.getGridX());
         double deltaY = Math.abs(s1.getGridY() - s2.getGridY());
         return deltaX + deltaY;
+    }
+
+    private double euclideanDistance(Square s1, Square s2) {
+        double deltaX = Math.pow(s1.getGridX() - s2.getGridX(), 2);
+        double deltaY = Math.pow(s1.getGridY() - s2.getGridY(), 2);
+        return Math.sqrt(deltaX + deltaY);
     }
 
     @Override
