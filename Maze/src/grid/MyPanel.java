@@ -1,5 +1,6 @@
 package grid;
 
+import searches.AStarSearch;
 import searches.BreadthFirstSearch;
 import searches.DepthFirstSearch;
 import searches.Search;
@@ -26,13 +27,20 @@ public class MyPanel extends JPanel implements ActionListener {
         grid = new Grid(chars);
         Square origin = grid.getSquare(mazeConstructor.agents.get(0));
         Square goal = grid.getSquare(mazeConstructor.goals.get(0));
-        if(searchKind.equals("BFS")) {
-            search = new BreadthFirstSearch(grid, origin, goal);
-        }
-        else {
-            search = new DepthFirstSearch(grid, origin, goal);
+
+        switch (searchKind) {
+            case "BFS":
+                search = new BreadthFirstSearch(grid, origin, goal);
+                break;
+            case "DFS":
+                search = new DepthFirstSearch(grid, origin, goal);
+                break;
+            default:
+                search = new AStarSearch(grid, origin, goal);
+                break;
         }
 
+        System.out.println("Performing " + searchKind + " search");
 
         int rows = grid.getRows();
         int cols = grid.getCols();
@@ -43,7 +51,7 @@ public class MyPanel extends JPanel implements ActionListener {
         this.setPreferredSize(new Dimension(PANEL_WIDTH, PANEL_HEIGHT));
         this.setBackground(Color.BLACK);
 
-        int fps = 24;
+        int fps = 20;
         timer = new Timer(1000/fps, this);
         timer.start();
     }

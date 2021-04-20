@@ -12,6 +12,7 @@ public class Square {
     private Point gridCoordinates;
     private Color color;
     public SquareType type;
+    public double distance = 0;
 
     public Square(SquareType type, Point screenCoordinates) {
         setType(type);

@@ -24,6 +24,7 @@ public class DepthFirstSearch extends Search{
             if(currentSquare.equals(goal)) {
                 currentSquare.setType(SquareType.GOAL_FOUND);
                 System.out.println("Found a path.");
+                System.out.println("distance = " + currentSquare.distance);
                 pathFound = true;
                 return;
             }
@@ -37,6 +38,12 @@ public class DepthFirstSearch extends Search{
             Set<Square> neighbours = grid.getNeighbours(currentSquare);
             for(Square neighbour : neighbours) {
                 if(! (neighbour.isWall() || visited.contains(neighbour) || stack.contains(neighbour) ) ) {
+                    if(neighbour.type == SquareType.TO_VISIT) {
+                        neighbour.distance = Math.min(neighbour.distance, currentSquare.distance + 1);
+                    }
+                    else {
+                        neighbour.distance = currentSquare.distance + 1;
+                    }
                     neighbour.setType(SquareType.TO_VISIT);
                     stack.add(neighbour);
                 }

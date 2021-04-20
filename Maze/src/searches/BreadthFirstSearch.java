@@ -19,12 +19,14 @@ public class BreadthFirstSearch extends Search{
         q.add(agent);
     }
 
+    @Override
     public void next() {
         if(!q.isEmpty()) { // still something left to explore
             Square currentSquare = q.poll();
             if(currentSquare.equals(goal)) {
                 currentSquare.setType(SquareType.GOAL_FOUND);
                 System.out.println("Found a path");
+                System.out.println("distance = " + currentSquare.distance);
                 pathFound = true;
                 return;
             }
@@ -38,6 +40,7 @@ public class BreadthFirstSearch extends Search{
             Set<Square> neighbours = grid.getNeighbours(currentSquare);
             for(Square neighbour : neighbours) {
                 if(! (neighbour.isWall() || visited.contains(neighbour) || q.contains(neighbour) ) ) {
+                    neighbour.distance = currentSquare.distance + 1;
                     neighbour.setType(SquareType.TO_VISIT);
                     q.add(neighbour);
                 }
