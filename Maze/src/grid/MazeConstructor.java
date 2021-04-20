@@ -14,7 +14,7 @@ public class MazeConstructor {
         goals = new LinkedList<>();
     }
 
-    public char[][] construct(String path) throws FileNotFoundException {
+    public char[][] constructMazeFromTextFile(String path) throws FileNotFoundException {
         File text = new File(path);
         Scanner sc = new Scanner(text);
 
@@ -47,6 +47,40 @@ public class MazeConstructor {
 
             }
         }
+
+        return result;
+    }
+
+    public char[][] randomMaze(int rows, int cols) {
+        char[][] result = new char[rows][cols];
+
+        for(int r=0; r<rows; r++) {
+            for(int c=0; c<cols; c++) {
+                char newChar;
+                if(Math.random() < 0.65) {
+                    newChar = ' ';
+                }
+                else {
+                    newChar = '#';
+                }
+                result[r][c] = newChar;
+            }
+        }
+        int agentX = new Random().nextInt(rows);
+        int agentY = new Random().nextInt(cols);
+        int goalX = new Random().nextInt(rows);
+        int goalY = new Random().nextInt(cols);
+
+        while(agentX == goalX && agentY == goalY) {
+            goalX = new Random().nextInt(rows);
+            goalY = new Random().nextInt(cols);
+        }
+
+        result[agentX][agentY] = 'A';
+        result[goalX][goalY] = 'G';
+
+        agents.add(new Point(agentX, agentY));
+        goals.add(new Point(goalX, goalY));
 
         return result;
     }

@@ -21,10 +21,22 @@ public class MyPanel extends JPanel implements ActionListener {
     Search search;
     private final int squareSize = 20;
 
-    public MyPanel(String searchKind) throws FileNotFoundException {
+    public MyPanel(String mazeName, String searchKind) throws FileNotFoundException {
         MazeConstructor mazeConstructor = new MazeConstructor();
-        char[][] chars = mazeConstructor.construct("maze1.txt");
-        grid = new Grid(chars);
+        char[][] mazeAsGridOfChars;
+        if(mazeName.equals("random")) {
+            mazeAsGridOfChars = mazeConstructor.randomMaze(25,25);
+        }
+        else {
+            try {
+                mazeAsGridOfChars = mazeConstructor.constructMazeFromTextFile(mazeName + ".txt");
+            } catch (FileNotFoundException e) {
+
+                System.out.println("Maze name <<<" + mazeName + ">>> Not found.\nSolving default maze: <<<maze1.txt>>>");
+                mazeAsGridOfChars = mazeConstructor.constructMazeFromTextFile("maze1.txt");
+            }
+        }
+        grid = new Grid(mazeAsGridOfChars);
         Square origin = grid.getSquare(mazeConstructor.agents.get(0));
         Square goal = grid.getSquare(mazeConstructor.goals.get(0));
 
