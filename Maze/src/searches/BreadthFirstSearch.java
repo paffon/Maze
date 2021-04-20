@@ -1,7 +1,6 @@
 package searches;
 
 import grid.Grid;
-import grid.Point;
 import grid.Square;
 import grid.SquareType;
 
@@ -10,55 +9,14 @@ import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Set;
 
-public class BreadthFirstSearch {
-    private Square agent, goal;
-    private int rows, cols;
-    private Grid grid;
-    private Set<Square> visited;
+public class BreadthFirstSearch extends Search{
     private Queue<Square> q;
-    private boolean pathMightExist;
-    private boolean pathFound;
 
     public BreadthFirstSearch(Grid grid, Square agentSquare, Square goalSquare) {
-        try {
-            assertPointNotIsNotWall(agentSquare, "agentSquare");
-            assertPointNotIsNotWall(goalSquare, "goalSquare");
-        } catch (SquareIsWallException | SquareDoesNotExistsException e) {
-            e.printStackTrace();
-        }
-
-        this.agent = agentSquare;
-        this.goal = goalSquare;
-
-        this.agent.setType(SquareType.AGENT);
-        this.goal.setType(SquareType.GOAL);
-
-        this.rows = grid.getRows();
-        this.cols = grid.getCols();
-        this.grid = grid;
+        super(grid, agentSquare, goalSquare);
 
         q = new LinkedList<>();
-        visited = new HashSet<>();
-
         q.add(agent);
-
-        pathMightExist = true;
-        pathFound = false;
-    }
-
-    private void assertPointNotIsNotWall(Square square, String name) throws
-            SquareIsWallException, SquareDoesNotExistsException {
-        if(square == null) {
-            String errorMessage = "The square [" +name+
-                    "] doesn't exist in the grid.";
-            throw new SquareDoesNotExistsException(errorMessage);
-        }
-        if(square.isWall()) {
-            String errorMessage = "The square [" +name+
-                    "] in location "+square.getScreenCoordinates()+
-                    " cannot be a wall.";
-            throw new SquareIsWallException(errorMessage);
-        }
     }
 
     public void next() {
@@ -89,13 +47,5 @@ public class BreadthFirstSearch {
             System.out.println("Path DOESN'T EXIST");
             pathMightExist = false;
         }
-    }
-
-    public boolean foundSolution() {
-        return pathFound;
-    }
-
-    public boolean solutionDoesNotExist() {
-        return !pathMightExist;
     }
 }

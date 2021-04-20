@@ -6,8 +6,8 @@ import java.io.FileNotFoundException;
 public class MyFrame extends JFrame {
     MyPanel panel;
 
-    public MyFrame() throws FileNotFoundException {
-        panel = new MyPanel();
+    public MyFrame(String searchKind) throws FileNotFoundException {
+        panel = new MyPanel(searchKind);
 
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.add(panel);

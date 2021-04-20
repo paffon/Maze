@@ -4,76 +4,26 @@ import grid.Grid;
 import grid.Square;
 import grid.SquareType;
 
-import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.Set;
 import java.util.Stack;
 
-public class DepthFirstSearch {
-    private Square agent, goal;
-    private int rows, cols;
-    private Grid grid;
-    private Set<Square> visited;
+public class DepthFirstSearch extends Search{
     private Stack<Square> stack;
-    private boolean pathMightExist;
-    private boolean pathFound;
 
     public DepthFirstSearch(Grid grid, Square agentSquare, Square goalSquare) {
-        try {
-            assertPointNotIsNotWall(agentSquare, "agentSquare");
-            assertPointNotIsNotWall(goalSquare, "goalSquare");
-        } catch (SquareIsWallException | SquareDoesNotExistsException e) {
-            e.printStackTrace();
-        }
-
-        this.agent = agentSquare;
-        this.goal = goalSquare;
-
-        this.agent.setType(SquareType.AGENT);
-        this.goal.setType(SquareType.GOAL);
-
-        this.rows = grid.getRows();
-        this.cols = grid.getCols();
-        this.grid = grid;
-
+        super(grid, agentSquare, goalSquare);
         stack = new Stack<>();
-        visited = new HashSet<>();
-
         stack.add(agent);
-
-        pathMightExist = true;
-        pathFound = false;
     }
 
-    private void assertPointNotIsNotWall(Square square, String name) throws
-            SquareIsWallException, SquareDoesNotExistsException {
-        if(square == null) {
-            String errorMessage = "The square [" +name+
-                    "] doesn't exist in the grid.";
-            throw new SquareDoesNotExistsException(errorMessage);
-        }
-        if(square.isWall()) {
-            String errorMessage = "The square [" +name+
-                    "] in location "+square.getScreenCoordinates()+
-                    " cannot be a wall.";
-            throw new SquareIsWallException(errorMessage);
-        }
-    }
 
-    public boolean foundSolution() {
-        return pathFound;
-    }
-
-    public boolean solutionDoesNotExist() {
-        return !pathMightExist;
-    }
-
+    @Override
     public void next() {
         if(!stack.isEmpty()) { // still something left to explore
             Square currentSquare = stack.pop();
             if(currentSquare.equals(goal)) {
                 currentSquare.setType(SquareType.GOAL_FOUND);
-                System.out.println("Found a path");
+                System.out.println("Found a path.");
                 pathFound = true;
                 return;
             }
@@ -93,7 +43,7 @@ public class DepthFirstSearch {
             }
         }
         else {
-            System.out.println("Path DOESN'T EXIST");
+            System.out.println("Path doesn't exit.");
             pathMightExist = false;
         }
     }

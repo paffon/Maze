@@ -1,6 +1,8 @@
 package grid;
 
 import searches.BreadthFirstSearch;
+import searches.DepthFirstSearch;
+import searches.Search;
 
 import javax.swing.*;
 import java.awt.*;
@@ -15,16 +17,22 @@ public class MyPanel extends JPanel implements ActionListener {
     int PANEL_HEIGHT;
     Timer timer;
     Grid grid;
-    BreadthFirstSearch bfs;
+    Search search;
     private final int squareSize = 20;
 
-    public MyPanel() throws FileNotFoundException {
-        MazeConstructor mz = new MazeConstructor();
-        char[][] chars = mz.construct("maze1.txt");
+    public MyPanel(String searchKind) throws FileNotFoundException {
+        MazeConstructor mazeConstructor = new MazeConstructor();
+        char[][] chars = mazeConstructor.construct("maze1.txt");
         grid = new Grid(chars);
-        Square origin = grid.getSquare(mz.agents.get(0));
-        Square goal = grid.getSquare(mz.goals.get(0));
-        bfs = new BreadthFirstSearch(grid, origin, goal);
+        Square origin = grid.getSquare(mazeConstructor.agents.get(0));
+        Square goal = grid.getSquare(mazeConstructor.goals.get(0));
+        if(searchKind.equals("BFS")) {
+            search = new BreadthFirstSearch(grid, origin, goal);
+        }
+        else {
+            search = new DepthFirstSearch(grid, origin, goal);
+        }
+
 
         int rows = grid.getRows();
         int cols = grid.getCols();
@@ -35,7 +43,7 @@ public class MyPanel extends JPanel implements ActionListener {
         this.setPreferredSize(new Dimension(PANEL_WIDTH, PANEL_HEIGHT));
         this.setBackground(Color.BLACK);
 
-        int fps = 1000;
+        int fps = 24;
         timer = new Timer(1000/fps, this);
         timer.start();
     }
@@ -56,7 +64,7 @@ public class MyPanel extends JPanel implements ActionListener {
 
                 g2D.setColor(currentSquare.getColor());
 
-                int margin = 2; // margin between squares
+                int margin = 0; // margin between squares
 
                 g2D.fillRect(x, y, squareSize - margin, squareSize - margin);
             }
@@ -67,10 +75,10 @@ public class MyPanel extends JPanel implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         // the actions to be performed between frames
 
-        if(bfs.foundSolution() || bfs.solutionDoesNotExist())
+        if(search.foundSolution() || search.solutionDoesNotExist())
             timer.stop();
         else {
-            bfs.next();
+            search.next();
             repaint(); // this calls paint() for us every time.
         }
     }
