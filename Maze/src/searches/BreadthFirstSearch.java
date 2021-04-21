@@ -4,10 +4,7 @@ import grid.Grid;
 import grid.Square;
 import grid.SquareType;
 
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.Queue;
-import java.util.Set;
+import java.util.*;
 
 public class BreadthFirstSearch extends Search{
     private Queue<Square> q;
@@ -38,7 +35,8 @@ public class BreadthFirstSearch extends Search{
 
             visited.add(currentSquare);
 
-            Set<Square> neighbours = grid.getNeighbours(currentSquare);
+            List<Square> neighbours = grid.getNeighbours(currentSquare);
+            Collections.shuffle(neighbours);
             for(Square neighbour : neighbours) {
                 if(! (neighbour.isWall() || visited.contains(neighbour) || q.contains(neighbour) ) ) {
                     neighbour.distance = currentSquare.distance + 1;

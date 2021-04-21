@@ -6,6 +6,7 @@ import grid.Square;
 import grid.SquareType;
 
 import java.util.Comparator;
+import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Set;
 
@@ -55,7 +56,7 @@ public class AStarSearch extends Search {
 
             visited.add(currentSquare);
 
-            Set<Square> neighbours = grid.getNeighbours(currentSquare);
+            List<Square> neighbours = grid.getNeighbours(currentSquare);
             for(Square neighbour : neighbours) {
                 if(! (neighbour.isWall() || visited.contains(neighbour) || pq.contains(neighbour) ) ) {
                     neighbour.distance = currentSquare.distance + 1;

@@ -4,6 +4,8 @@ import grid.Grid;
 import grid.Square;
 import grid.SquareType;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Set;
 import java.util.Stack;
 
@@ -36,7 +38,8 @@ public class DepthFirstSearch extends Search{
 
             visited.add(currentSquare);
 
-            Set<Square> neighbours = grid.getNeighbours(currentSquare);
+            List<Square> neighbours = grid.getNeighbours(currentSquare);
+            Collections.shuffle(neighbours);
             for(Square neighbour : neighbours) {
                 if(! (neighbour.isWall() || visited.contains(neighbour) || stack.contains(neighbour) ) ) {
                     if(neighbour.type == SquareType.TO_VISIT) {

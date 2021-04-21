@@ -18,7 +18,7 @@ public class MyPanel extends JPanel implements ActionListener {
     Timer timer;
     Grid grid;
     Search search;
-    private final int squareSize = 7;
+    private final int squareSize = 3;
     private final int fps = 1000;
 
     public MyPanel(String mazeName, String searchKind) throws FileNotFoundException {

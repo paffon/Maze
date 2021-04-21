@@ -4,10 +4,7 @@ import grid.Grid;
 import grid.Square;
 import grid.SquareType;
 
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.Queue;
-import java.util.Set;
+import java.util.*;
 
 public abstract class Search {
     protected Square agent, goal, runner;
@@ -86,7 +83,7 @@ public abstract class Search {
     }
 
     protected Square leastDistanceNeighbour(Square runner) {
-        Set<Square> neighbours = grid.getNeighbours(runner);
+        List<Square> neighbours = grid.getNeighbours(runner);
         if(neighbours.isEmpty()) return null; // no neighbours found
 
         Square bestNeighbour = null;

@@ -1,9 +1,6 @@
 package grid;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class Grid {
     private Square[][] squares;
@@ -84,13 +81,13 @@ public class Grid {
         }
     }
 
-    public Set<Square> getNeighbours(int r, int c) {
+    public List<Square> getNeighbours(int r, int c) {
         Square north = getSquare(r, c-1);
         Square south = getSquare(r, c+1);
         Square east = getSquare(r+1, c);
         Square west = getSquare(r-1, c);
 
-        Set<Square> result = new HashSet<>();
+        List<Square> result = new ArrayList<>();
         if(north != null) result.add(north);
         if(south != null) result.add(south);
         if(east != null) result.add(east);
@@ -99,10 +96,10 @@ public class Grid {
         return result;
     }
 
-    public Set<Square> getNeighbours(Point p) {
+    public List<Square> getNeighbours(Point p) {
         return getNeighbours(p.x, p.y);
     }
-    public Set<Square> getNeighbours(Square s) {
+    public List<Square> getNeighbours(Square s) {
         return getNeighbours(s.getGridCoordinates());
     }
 }

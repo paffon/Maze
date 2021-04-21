@@ -151,7 +151,7 @@ public class MazeConstructor {
     }
 
     private boolean eligible(Point point, char[][] chars) {
-        double probability = 0.1; // higher number [0,1] --> more spaces in the maze
+        double probability = 0.2; // higher number [0,1] --> more spaces in the maze
         int nearbySpacesCounter = countNeighboursOfType(point, ' ', 1, chars);
         int limit = 2;
         if(Math.random() > probability) limit = 1;
