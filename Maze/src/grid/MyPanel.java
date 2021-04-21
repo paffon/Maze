@@ -10,7 +10,6 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.FileNotFoundException;
-import java.util.Random;
 
 public class MyPanel extends JPanel implements ActionListener {
 
@@ -20,13 +19,15 @@ public class MyPanel extends JPanel implements ActionListener {
     Grid grid;
     Search search;
     private final int squareSize = 20;
+    private final int fps = 50;
 
     public MyPanel(String mazeName, String searchKind) throws FileNotFoundException {
         MazeConstructor mazeConstructor = new MazeConstructor();
         char[][] mazeAsGridOfChars;
         if(mazeName.equals("random") || mazeName.equals("")) {
             mazeName = "randomized";
-            mazeAsGridOfChars = mazeConstructor.proceduralRandomMaze(30,70);
+            mazeAsGridOfChars = mazeConstructor.proceduralRandomMaze(38,75); // Full size version
+//            mazeAsGridOfChars = mazeConstructor.proceduralRandomMaze(20,20); // Small version
         }
         else {
             try {
@@ -65,7 +66,6 @@ public class MyPanel extends JPanel implements ActionListener {
         this.setPreferredSize(new Dimension(PANEL_WIDTH, PANEL_HEIGHT));
         this.setBackground(Color.BLACK);
 
-        int fps = 20;
         timer = new Timer(1000/fps, this);
         timer.start();
     }
@@ -77,6 +77,7 @@ public class MyPanel extends JPanel implements ActionListener {
 
         int rows = grid.getRows();
         int cols = grid.getCols();
+
         for(int r = 0; r < rows; r++) {
             for(int c = 0; c < cols; c++) {
                 Square currentSquare = grid.getSquare(r, c);
@@ -97,23 +98,19 @@ public class MyPanel extends JPanel implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         // the actions to be performed between frames
 
-        if(search.foundSolution() || search.solutionDoesNotExist())
-            timer.stop();
+        if(search.isSolved() || search.solutionDoesNotExist()) {
+            if (search.backtrackReconstructed()) {
+                timer.stop();
+            } else {
+                search.reconstructPath();
+            }
+        }
         else {
             search.next();
-            repaint(); // this calls paint() for us every time.
         }
-    }
 
-    private void changeRandomSquareRandomly() {
-        int rows = grid.getRows();
-        int cols = grid.getCols();
 
-        int randomRow = new Random().nextInt(rows); // random in [0,rows)
-        int randomCol = new Random().nextInt(cols); // random in [0,cols)
+        repaint(); // this calls paint() for us every time.
 
-        Square randomSquare = grid.getSquare(randomRow, randomCol);
-
-        randomSquare.setNextType();
     }
 }

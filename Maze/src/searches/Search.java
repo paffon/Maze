@@ -10,12 +10,13 @@ import java.util.Queue;
 import java.util.Set;
 
 public abstract class Search {
-    protected Square agent, goal;
+    protected Square agent, goal, runner;
     protected int rows, cols;
     protected Grid grid;
     protected Set<Square> visited;
     protected boolean pathMightExist;
     protected boolean pathFound;
+    protected boolean pathReconstructed;
 
     public Search(Grid grid, Square agentSquare, Square goalSquare) {
         try {
@@ -39,6 +40,7 @@ public abstract class Search {
 
         pathMightExist = true;
         pathFound = false;
+        pathReconstructed = false;
     }
 
     private void assertPointNotIsNotWall(Square square, String name) throws
@@ -56,7 +58,7 @@ public abstract class Search {
         }
     }
 
-    public boolean foundSolution() {
+    public boolean isSolved() {
         return pathFound;
     }
 
@@ -64,5 +66,43 @@ public abstract class Search {
         return !pathMightExist;
     }
 
+    public boolean backtrackReconstructed() {
+        return pathReconstructed;
+    }
+
+    public void reconstructPath() {
+        if(!isSolved()) {
+            // There is no path to reconstruct.
+            return;
+        }
+
+        if(runner == null || runner.equals(agent)) {
+            pathReconstructed = true;
+        }
+        else {
+            if(!runner.equals(goal)) runner.setType(SquareType.BEST_PATH);
+            runner = leastDistanceNeighbour(runner);
+        }
+    }
+
+    protected Square leastDistanceNeighbour(Square runner) {
+        Set<Square> neighbours = grid.getNeighbours(runner);
+        if(neighbours.isEmpty()) return null; // no neighbours found
+
+        Square bestNeighbour = null;
+        double minDistance = Double.MAX_VALUE;
+
+        for(Square neighbour : neighbours) {
+            if(neighbour.distance < minDistance && neighbour.type == SquareType.VISITED) {
+                minDistance = neighbour.distance;
+                bestNeighbour = neighbour;
+            }
+        }
+
+        return bestNeighbour;
+    }
+
     public abstract void next();
+
+
 }

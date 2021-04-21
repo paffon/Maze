@@ -139,7 +139,7 @@ public class MazeConstructor {
         else rStop = -1;
         if(cStart == 0) cStop = cols;
         else cStop = -1;
-        
+
         for(int r=rStart; r!=rStop; r+=delta_r) {
             for(int c=cStart; c!=cStop; c+=delta_c) {
                 char currentChar = chars[r][c];
@@ -151,7 +151,7 @@ public class MazeConstructor {
     }
 
     private boolean eligible(Point point, char[][] chars) {
-        double probability = 0.3; // higher number [0,1] --> more spaces in the maze
+        double probability = 0.1; // higher number [0,1] --> more spaces in the maze
         int nearbySpacesCounter = countNeighboursOfType(point, ' ', 1, chars);
         int limit = 2;
         if(Math.random() > probability) limit = 1;

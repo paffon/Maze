@@ -40,6 +40,8 @@ public class Square {
                 return new Color(60,210,150);
             case VISITED:
                 return new Color(50,200,100);
+            case BEST_PATH:
+                return new Color(250, 0, 100);
             default:
                 System.out.println("Color undefined for type " + type + ". Setting to default color.");
                 return Color.white;

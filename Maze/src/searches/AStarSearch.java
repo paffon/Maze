@@ -44,6 +44,7 @@ public class AStarSearch extends Search {
                 currentSquare.setType(SquareType.GOAL_FOUND);
                 System.out.println("Found a path");
                 System.out.println("distance = " + currentSquare.distance);
+                runner = goal;
                 pathFound = true;
                 return;
             }
