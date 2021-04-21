@@ -10,7 +10,7 @@ public class Grid {
 
     private int rows, cols;
 
-    private int squareSize = 20; // Default square size
+    private int squareSize; // Default square size
 
     public Grid(int rows, int cols, int squareSize) {
         this.rows = rows;
@@ -20,7 +20,9 @@ public class Grid {
         initEmptyGrid();
     }
 
-    public Grid(char[][] chars) {
+    public Grid(char[][] chars, int squareSize) {
+        this.squareSize = squareSize;
+
         Map<Character, SquareType> types = new HashMap<>();
         types.put('#', SquareType.WALL);
         types.put(' ', SquareType.FREE);

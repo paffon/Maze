@@ -18,16 +18,27 @@ public class MyPanel extends JPanel implements ActionListener {
     Timer timer;
     Grid grid;
     Search search;
-    private final int squareSize = 20;
-    private final int fps = 50;
+    private final int squareSize = 7;
+    private final int fps = 1000;
 
     public MyPanel(String mazeName, String searchKind) throws FileNotFoundException {
+        // Window setup
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        double screenWidth = screenSize.getWidth();
+        double screenHeight = screenSize.getHeight();
+
+        this.PANEL_WIDTH = (int) (0.9 * screenWidth);
+        this.PANEL_HEIGHT = (int) (0.9 * screenHeight);
+
+        this.setPreferredSize(new Dimension(PANEL_WIDTH, PANEL_HEIGHT));
+        this.setBackground(Color.BLACK);
+
+        // Maze setup
         MazeConstructor mazeConstructor = new MazeConstructor();
         char[][] mazeAsGridOfChars;
         if(mazeName.equals("random") || mazeName.equals("")) {
             mazeName = "randomized";
-            mazeAsGridOfChars = mazeConstructor.proceduralRandomMaze(38,75); // Full size version
-//            mazeAsGridOfChars = mazeConstructor.proceduralRandomMaze(20,20); // Small version
+            mazeAsGridOfChars = mazeConstructor.proceduralRandomMaze(PANEL_HEIGHT / squareSize,PANEL_WIDTH / squareSize); // Super-size version
         }
         else {
             try {
@@ -38,7 +49,7 @@ public class MyPanel extends JPanel implements ActionListener {
                 mazeAsGridOfChars = mazeConstructor.constructMazeFromTextFile(mazeName+".txt");
             }
         }
-        grid = new Grid(mazeAsGridOfChars);
+        grid = new Grid(mazeAsGridOfChars, squareSize);
         Square origin = grid.getSquare(mazeConstructor.agents.get(0));
         Square goal = grid.getSquare(mazeConstructor.goals.get(0));
 
@@ -60,12 +71,6 @@ public class MyPanel extends JPanel implements ActionListener {
         int rows = grid.getRows();
         int cols = grid.getCols();
 
-        this.PANEL_WIDTH = cols * squareSize;
-        this.PANEL_HEIGHT = rows * squareSize;
-
-        this.setPreferredSize(new Dimension(PANEL_WIDTH, PANEL_HEIGHT));
-        this.setBackground(Color.BLACK);
-
         timer = new Timer(1000/fps, this);
         timer.start();
     }
@@ -83,7 +88,6 @@ public class MyPanel extends JPanel implements ActionListener {
                 Square currentSquare = grid.getSquare(r, c);
                 int x = currentSquare.getScreenX();
                 int y = currentSquare.getScreenY();
-                int squareSize = grid.getSquareSize();
 
                 g2D.setColor(currentSquare.getColor());
 
