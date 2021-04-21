@@ -24,8 +24,9 @@ public class MyPanel extends JPanel implements ActionListener {
     public MyPanel(String mazeName, String searchKind) throws FileNotFoundException {
         MazeConstructor mazeConstructor = new MazeConstructor();
         char[][] mazeAsGridOfChars;
-        if(mazeName.equals("random")) {
-            mazeAsGridOfChars = mazeConstructor.randomMaze(25,25);
+        if(mazeName.equals("random") || mazeName.equals("")) {
+            mazeName = "randomized";
+            mazeAsGridOfChars = mazeConstructor.proceduralRandomMaze(30,70);
         }
         else {
             try {
@@ -64,7 +65,7 @@ public class MyPanel extends JPanel implements ActionListener {
         this.setPreferredSize(new Dimension(PANEL_WIDTH, PANEL_HEIGHT));
         this.setBackground(Color.BLACK);
 
-        int fps = 50;
+        int fps = 20;
         timer = new Timer(1000/fps, this);
         timer.start();
     }
