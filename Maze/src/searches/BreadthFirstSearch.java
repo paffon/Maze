@@ -9,11 +9,11 @@ import java.util.*;
 public class BreadthFirstSearch extends Search{
     private Queue<Square> q;
 
-    public BreadthFirstSearch(Grid grid, Square agentSquare, Square goalSquare) {
-        super(grid, agentSquare, goalSquare);
+    public BreadthFirstSearch(Grid grid, Square originSquare, Square goalSquare) {
+        super(grid, originSquare, goalSquare);
 
         q = new LinkedList<>();
-        q.add(agent);
+        q.add(origin);
     }
 
     @Override
@@ -24,12 +24,12 @@ public class BreadthFirstSearch extends Search{
                 currentSquare.setType(SquareType.GOAL_FOUND);
                 System.out.println("Found a path");
                 System.out.println("distance = " + currentSquare.distance);
-                runner = goal;
+                backRunner = goal;
                 pathFound = true;
                 return;
             }
 
-            if(! currentSquare.isAgent()) {
+            if(! currentSquare.isOrigin()) {
                 currentSquare.setType(SquareType.VISITED);
             }
 

@@ -23,7 +23,7 @@ public class Grid {
         Map<Character, SquareType> types = new HashMap<>();
         types.put('#', SquareType.WALL);
         types.put(' ', SquareType.FREE);
-        types.put('A', SquareType.AGENT);
+        types.put('A', SquareType.ORIGIN);
         types.put('G', SquareType.GOAL);
 
         this.rows = chars.length;

@@ -1,34 +1,26 @@
 package searches;
 
 import grid.Grid;
-import grid.Point;
 import grid.Square;
 import grid.SquareType;
 
 import java.util.Comparator;
 import java.util.List;
 import java.util.PriorityQueue;
-import java.util.Set;
 
 public class AStarSearch extends Search {
     PriorityQueue<Square> pq;
 
-    public AStarSearch(Grid grid, Square agentSquare, Square goalSquare) {
-        super(grid, agentSquare, goalSquare);
+    public AStarSearch(Grid grid, Square originSquare, Square goalSquare) {
+        super(grid, originSquare, goalSquare);
 
         pq = new PriorityQueue<Square>(rows * cols,
                 Comparator.comparing(x -> x.distance + heuristic(x)));
-        pq.add(agent);
+        pq.add(origin);
     }
 
     public double heuristic(Square square) {
         return Math.pow(euclideanDistance(square, goal), 2); // Squaring the heuristic to give it more weight
-    }
-
-    private double manhattanDistance(Square s1, Square s2) {
-        double deltaX = Math.abs(s1.getGridX() - s2.getGridX());
-        double deltaY = Math.abs(s1.getGridY() - s2.getGridY());
-        return deltaX + deltaY;
     }
 
     private double euclideanDistance(Square s1, Square s2) {
@@ -39,18 +31,19 @@ public class AStarSearch extends Search {
 
     @Override
     public void next() {
-        if(!pq.isEmpty()) { // still something left to explore
+        if(!pq.isEmpty()) {
+            // still something left to explore
             Square currentSquare = pq.poll();
             if(currentSquare.equals(goal)) {
                 currentSquare.setType(SquareType.GOAL_FOUND);
                 System.out.println("Found a path");
                 System.out.println("distance = " + currentSquare.distance);
-                runner = goal;
+                backRunner = goal;
                 pathFound = true;
                 return;
             }
 
-            if(! currentSquare.isAgent()) {
+            if(! currentSquare.isOrigin()) {
                 currentSquare.setType(SquareType.VISITED);
             }
 
@@ -66,6 +59,7 @@ public class AStarSearch extends Search {
             }
         }
         else {
+            // pq is empty
             System.out.println("Path DOESN'T EXIST");
             pathMightExist = false;
         }

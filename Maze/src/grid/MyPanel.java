@@ -18,41 +18,26 @@ public class MyPanel extends JPanel implements ActionListener {
     Timer timer;
     Grid grid;
     Search search;
-    private final int squareSize = 3;
-    private final int fps = 1000;
+    private final int squareSize = 10;
+    private final int fps = 20;
+    private MazeConstructor mazeConstructor;
 
     public MyPanel(String mazeName, String searchKind) throws FileNotFoundException {
-        // Window setup
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        double screenWidth = screenSize.getWidth();
-        double screenHeight = screenSize.getHeight();
+        windowSetup();
+        gridSetup(mazeName);
 
-        this.PANEL_WIDTH = (int) (0.9 * screenWidth);
-        this.PANEL_HEIGHT = (int) (0.9 * screenHeight);
-
-        this.setPreferredSize(new Dimension(PANEL_WIDTH, PANEL_HEIGHT));
-        this.setBackground(Color.BLACK);
-
-        // Maze setup
-        MazeConstructor mazeConstructor = new MazeConstructor();
-        char[][] mazeAsGridOfChars;
-        if(mazeName.equals("random") || mazeName.equals("")) {
-            mazeName = "randomized";
-            mazeAsGridOfChars = mazeConstructor.proceduralRandomMaze(PANEL_HEIGHT / squareSize,PANEL_WIDTH / squareSize); // Super-size version
-        }
-        else {
-            try {
-                mazeAsGridOfChars = mazeConstructor.constructMazeFromTextFile(mazeName + ".txt");
-            } catch (FileNotFoundException e) {
-                System.out.println("Maze name <<<" + mazeName + ">>> Not found.");
-                mazeName = "maze4";
-                mazeAsGridOfChars = mazeConstructor.constructMazeFromTextFile(mazeName+".txt");
-            }
-        }
-        grid = new Grid(mazeAsGridOfChars, squareSize);
         Square origin = grid.getSquare(mazeConstructor.agents.get(0));
         Square goal = grid.getSquare(mazeConstructor.goals.get(0));
 
+        searchSetup(searchKind, origin, goal);
+
+        System.out.println("Solving maze '"+mazeName+"' with '" + searchKind + "' search...");
+
+        timer = new Timer(1000/fps, this);
+        timer.start();
+    }
+
+    private void searchSetup(String searchKind, Square origin, Square goal) {
         switch (searchKind) {
             case "BFS":
                 search = new BreadthFirstSearch(grid, origin, goal);
@@ -66,13 +51,39 @@ public class MyPanel extends JPanel implements ActionListener {
                 break;
         }
 
-        System.out.println("Solving maze '"+mazeName+"' with '" + searchKind + "' search...");
+//        return searchKind;
+    }
 
-        int rows = grid.getRows();
-        int cols = grid.getCols();
+    private void gridSetup(String mazeName) throws FileNotFoundException {
+        mazeConstructor = new MazeConstructor();
 
-        timer = new Timer(1000/fps, this);
-        timer.start();
+        char[][] mazeAsGridOfChars;
+        if(mazeName.equals("random") || mazeName.equals("DEFAULT MAZE") || mazeName.equals("")) {
+            // random procedural maze
+            mazeAsGridOfChars = mazeConstructor.proceduralRandomMaze(PANEL_HEIGHT / squareSize,PANEL_WIDTH / squareSize); // Super-size version
+        }
+        else {
+            try {
+                mazeAsGridOfChars = mazeConstructor.constructMazeFromTextFile(mazeName + ".txt");
+            } catch (FileNotFoundException e) {
+                System.out.println("Maze name <<<" + mazeName + ">>> Not found.");
+                mazeName = "maze4";
+                mazeAsGridOfChars = mazeConstructor.constructMazeFromTextFile(mazeName+".txt");
+            }
+        }
+        grid = new Grid(mazeAsGridOfChars, squareSize);
+    }
+
+    private void windowSetup() {
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        double screenWidth = screenSize.getWidth();
+        double screenHeight = screenSize.getHeight();
+
+        this.PANEL_WIDTH = (int) (0.9 * screenWidth);
+        this.PANEL_HEIGHT = (int) (0.9 * screenHeight);
+
+        this.setPreferredSize(new Dimension(PANEL_WIDTH, PANEL_HEIGHT));
+        this.setBackground(Color.BLACK);
     }
 
     public void paint(Graphics g) {
@@ -101,7 +112,6 @@ public class MyPanel extends JPanel implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         // the actions to be performed between frames
-
         if(search.isSolved() || search.solutionDoesNotExist()) {
             if (search.backtrackReconstructed()) {
                 timer.stop();
@@ -113,8 +123,6 @@ public class MyPanel extends JPanel implements ActionListener {
             search.next();
         }
 
-
         repaint(); // this calls paint() for us every time.
-
     }
 }

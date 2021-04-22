@@ -7,7 +7,7 @@ import grid.SquareType;
 import java.util.*;
 
 public abstract class Search {
-    protected Square agent, goal, runner;
+    protected Square origin, goal, backRunner;
     protected int rows, cols;
     protected Grid grid;
     protected Set<Square> visited;
@@ -15,18 +15,18 @@ public abstract class Search {
     protected boolean pathFound;
     protected boolean pathReconstructed;
 
-    public Search(Grid grid, Square agentSquare, Square goalSquare) {
+    public Search(Grid grid, Square originSquare, Square goalSquare) {
         try {
-            assertPointNotIsNotWall(agentSquare, "agentSquare");
+            assertPointNotIsNotWall(originSquare, "originSquare");
             assertPointNotIsNotWall(goalSquare, "goalSquare");
         } catch (SquareIsWallException | SquareDoesNotExistsException e) {
             e.printStackTrace();
         }
 
-        this.agent = agentSquare;
+        this.origin = originSquare;
         this.goal = goalSquare;
 
-        this.agent.setType(SquareType.AGENT);
+        this.origin.setType(SquareType.ORIGIN);
         this.goal.setType(SquareType.GOAL);
 
         this.rows = grid.getRows();
@@ -67,38 +67,43 @@ public abstract class Search {
         return pathReconstructed;
     }
 
+    // Once a path is found,
+    // this will backtrack and find the shortest (known) path back to the origin
     public void reconstructPath() {
         if(!isSolved()) {
             // There is no path to reconstruct.
             return;
         }
 
-        if(runner == null || runner.equals(agent)) {
+        if(backRunner == null || backRunner.equals(origin)) {
             pathReconstructed = true;
         }
         else {
-            if(!runner.equals(goal)) runner.setType(SquareType.BEST_PATH);
-            runner = leastDistanceNeighbour(runner);
+            if(!backRunner.equals(goal)) backRunner.setType(SquareType.BEST_PATH);
+            backRunner = minDistanceNeighbour(backRunner);
         }
     }
 
-    protected Square leastDistanceNeighbour(Square runner) {
+    protected Square minDistanceNeighbour(Square runner) {
         List<Square> neighbours = grid.getNeighbours(runner);
         if(neighbours.isEmpty()) return null; // no neighbours found
 
-        Square bestNeighbour = null;
+        Square minDistanceNeighbour = null;
         double minDistance = Double.MAX_VALUE;
 
         for(Square neighbour : neighbours) {
             if(neighbour.distance < minDistance && neighbour.type == SquareType.VISITED) {
                 minDistance = neighbour.distance;
-                bestNeighbour = neighbour;
+                minDistanceNeighbour = neighbour;
             }
+            // if one of the neighbours is the origin, no need to continue
+            if(neighbour.type == SquareType.ORIGIN) return null;
         }
 
-        return bestNeighbour;
+        return minDistanceNeighbour;
     }
 
+    // Every extension must include a search method
     public abstract void next();
 
 

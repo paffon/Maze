@@ -6,16 +6,15 @@ import grid.SquareType;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 import java.util.Stack;
 
 public class DepthFirstSearch extends Search{
     private Stack<Square> stack;
 
-    public DepthFirstSearch(Grid grid, Square agentSquare, Square goalSquare) {
-        super(grid, agentSquare, goalSquare);
+    public DepthFirstSearch(Grid grid, Square originSquare, Square goalSquare) {
+        super(grid, originSquare, goalSquare);
         stack = new Stack<>();
-        stack.add(agent);
+        stack.add(origin);
     }
 
 
@@ -27,12 +26,12 @@ public class DepthFirstSearch extends Search{
                 currentSquare.setType(SquareType.GOAL_FOUND);
                 System.out.println("Found a path.");
                 System.out.println("distance = " + currentSquare.distance);
-                runner = goal;
+                backRunner = goal;
                 pathFound = true;
                 return;
             }
 
-            if(! currentSquare.isAgent()) {
+            if(! currentSquare.isOrigin()) {
                 currentSquare.setType(SquareType.VISITED);
             }
 

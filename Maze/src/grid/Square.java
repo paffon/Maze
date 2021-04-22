@@ -30,7 +30,7 @@ public class Square {
                 return new Color(220,220,220);
             case WALL:
                 return new Color(20,50,50);
-            case AGENT:
+            case ORIGIN:
                 return new Color(200,50,50);
             case GOAL:
                 return new Color(0,100,200);
@@ -82,8 +82,8 @@ public class Square {
         return this.type == SquareType.WALL;
     }
 
-    public boolean isAgent() {
-        return this.type == SquareType.AGENT;
+    public boolean isOrigin() {
+        return this.type == SquareType.ORIGIN;
     }
 
     public void setRandomType() {
