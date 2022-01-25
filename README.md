@@ -22,18 +22,16 @@ Read more: [A* search algorithm](https://en.wikipedia.org/wiki/A*_search_algorit
 
 ## What am I looking at, exactly?
 
-Given an agent (in red), a goal (int blue) - does there exist a way to get from the agent to the goal?
+Given an agent (in red), a goal (in blue) - Is there a way to get from the agent to the goal?
 The three algorithms share a common idea:
-1. Starting from the agent, decidewhich next square you want to explore. Maybe give it a nice light-green color.
-2. From all the squares you wanted to explore, choose one (which one? Depends on the specific algorithm. AStar for example chooses the one physically closest to the goal) and repeat until you find the goal.
+1. Starting from the agent, decide which next square you want to explore. Color this square light-green.
+2. From all the squares you wanted to explore, choose one (which one? Depends on the specific algorithm. AStar, for example, chooses the one with the lowest Eucledian distance to the goal) and repeat until you find the goal.
 
 The expanding paths you see when you run the program are the expanding search- this is where the algorithm is currently looking to find the goal.
 
-If a path is found, the algorithm will back track, ignoring the errors it did along the way- and show you the actual best path available to it.
+If a path is found, the algorithm will back track, ignoring the errors it did along the way, and show you the actual best path available to it, note that there might be better ways to get from the agent to the destination. No algorithm is perfect, right? If the shortest path is found, it often comes at a higher searching time (like in BFS). The highlighted path is guaranteed to be the shortest one only by using BFS (it is also likely to take a long time to find). Using DFS and AStar might give different results. Have fun playing with it.
 
-NOTE! The highlighted path is the guaranteed to be the shortest one only by using BFS (it is also likely to take a long time to find). Using DFS and AStar might give different results. Have fun playing with it.
-
-NOTE 2! You can also use the maze constructor attached as an excel file.
+You can also use the maze constructor attached as an excel file.
 
 ## Example
 
