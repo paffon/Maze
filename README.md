@@ -3,7 +3,7 @@
 Maze is a visual demonstration of 3 search algorithms:
 
 ### 1. Breadth First Search
-BFS is a search algorithm, in which closer places are searched before farther ones get searched.
+BFS is a search algorithm, in which closer places are searched before farther ones.
 Read more: [Breadth-first search](https://en.wikipedia.org/wiki/Breadth-first_search)
 
 ### 2. Depth First Search
